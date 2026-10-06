@@ -1,0 +1,28 @@
+// Keep UI copy here so another locale can supply the same keys.
+export const en = {
+ brand: 'Tenderdesk', product: 'DOCUMENT PACKAGE BUILDER', local: 'Files stay on this device', eyebrow: 'YOUR SUBMISSION WORKSPACE', stepTag: 'STEP 2 OF 3', footer: 'Tenderdesk · A little order. A more confident submission.', browser: 'Browser-only processing',
+ mandatoryMissing: (count: number) => `${count} mandatory missing`, fileUsage: (count: number, max: number) => `${count} / ${max} files`, fileDetails: (pages: number, size: string) => `${pages} ${pages === 1 ? 'page' : 'pages'} · ${size}`, pagesRead: (pages: number, reading: boolean) => `${pages} pages read${reading ? ' · Reading remaining PDFs…' : ''}`,
+ heading: 'A complete tender starts here.', intro: 'Bring in your requirements and supporting documents. Build a clear foundation for your submission.',
+ import: 'Import requirements', sample: 'Load sample', importing: 'Loading…',
+ step1: 'Import & prepare', step2: 'Match & review', step3: 'Generate package', later: 'Available in a later step',
+ summary: 'Tender overview', emptyTitle: 'Your next tender, organized.', emptySummary: 'Import a requirements.json file to see the tender details and required documents.',
+ entity: 'Procuring entity', bidder: 'Bidder', deadline: 'Submission deadline',
+ docs: 'Supporting documents', docsHelp: 'Add the PDFs you plan to include in your tender.', choose: 'Choose PDFs', drop: 'Drop your PDFs here', dropHelp: 'or choose files from your device', limits: 'PDF only · Up to 30 files · 50 MB total',
+ noDocs: 'No documents added yet', noDocsHelp: 'Your filenames and page counts will appear here.', reading: 'Reading pages…', remove: 'Remove',
+ requirements: 'Requirements checklist', reqHelp: 'Listed in the order specified by the tender.', reqEmpty: 'Start with your requirements', reqEmptyHelp: 'Choose a requirements.json file or load the sample to explore the workspace.',
+ mandatory: 'Mandatory', optional: 'Optional', expiry: 'Expiry date required', noExpiry: 'No expiry date required', missing: 'Missing', notProvided: 'Not provided',
+ order: 'Order', document: 'Required document', status: 'Status',
+ readiness: 'Package readiness', generate: 'Generate package', blocked: 'Generate remains unavailable until PDF generation is implemented in Step 3.',
+ next: 'Review every match before generating', nextHelp: 'One PDF per requirement. Identical copies can be used only once.', sampleNotice: 'Sample loaded. All sample companies and documents are fictional.',
+ expiryNeeded: 'Expiry date needed', expired: 'Expired', ok: 'OK', chooseMatch: 'Choose a PDF…', unmatch: 'Unmatch', undo: 'Undo last match change', expiryDate: 'Expiry date', checking: 'Checking file…', duplicate: 'Identical copy', hashFail: 'Cannot check this file for duplicates. Remove it and try again.',
+ matchLabel: (title: string) => `PDF for ${title}`, expiryLabel: (title: string) => `Expiry date for ${title}`, unmatchLabel: (title: string) => `Unmatch ${title}`,
+ duplicateOf: (names: string) => `Identical bytes to: ${names}. Use only one copy.`, assignedTo: (title: string) => `Matched to ${title}`, used: 'Already matched', unavailable: 'File is unreadable or still being checked', conflict: 'This PDF or an identical copy is already matched. Unmatch it first.',
+ reasons: { missing: 'Choose a PDF for this mandatory requirement.', expiryNeeded: 'Enter a valid expiry date for the matched PDF.', expired: 'Expiry is before the submission deadline. Replace the PDF or correct the date.' },
+ readyCounts: (ok: number, skipped: number, blockers: number) => `${ok} OK · ${skipped} optional not provided · ${blockers} blocking ${blockers === 1 ? 'issue' : 'issues'}`,
+ uploadCounts: (checking: number, errors: number, duplicates: number) => `${checking} files being checked · ${errors} unreadable files · ${duplicates} identical copies`, allReady: 'Checklist ready for generation.',
+ jsonSyntax: 'This file is not valid JSON. Check the formatting and try again.', jsonFile: 'Choose a .json requirements file.', dismiss: 'Dismiss messages',
+ pdfOnly: 'Only PDF files are accepted.', countLimit: 'The limit is 30 PDFs. Remove a file before adding another.', sizeLimit: 'This file would exceed the 50 MB total limit.', unreadable: 'Cannot read this PDF. It may be damaged or password protected.',
+ sampleFail: 'The sample could not be loaded. Try again or import files from your device.',
+ privacy: 'Private by design. Your uploaded documents are processed in your browser and are never sent to a server.',
+ readFail: 'This requirements file could not be read. Please try another file.'
+};

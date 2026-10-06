@@ -1,0 +1,6 @@
+/* Keep compact table headers separated and removal controls easy to tap. */
+@media (max-width:700px) {
+ .table-head span:first-child { font-size:7px; letter-spacing:0; }
+ .file-row .icon-button { min-width:44px; min-height:44px; }
+ .workflow>span { min-width:0; }
+}
