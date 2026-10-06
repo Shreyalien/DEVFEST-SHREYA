@@ -1,21 +1,43 @@
-# Tenderdesk — Tender Document Package Builder
+# Tenderdesk
 
-Browser-only tender document package preparation web application built with React 19, TypeScript, Vite, and PDF-lib. Fully client-side with zero backend dependencies or network uploads: all document verification, SHA-256 fingerprinting, page counting, and PDF assembly occur locally in the user's browser.
+### Tender Document Package Builder
 
-- **Author**: Shreya Golder
-- **Registration**: 251-15-467
-- **Repository**: [https://github.com/Shreyalien/DEVFEST-SHREYA.git](https://github.com/Shreyalien/DEVFEST-SHREYA.git)
-- **Live Deployment**: [https://tenderdesk-two.vercel.app/](https://tenderdesk-two.vercel.app/)
+**Turn supporting PDFs into one checked, correctly ordered tender submission.**
 
----
+Tenderdesk helps office staff import tender requirements, match documents, check expiry dates, identify identical copies, and generate a complete PDF package. All document processing happens in the browser. English and Bangla interfaces preserve the same working state.
 
-## Getting Started
+## Screenshots
 
-### Prerequisites
-- Node.js (v18+ recommended)
-- npm
+### Desktop
 
-### Installation & Run
+The completed sample shows document assignments, expiry checks, duplicate notices, readiness counts, and the generated package download.
+
+![Tenderdesk desktop workspace](screenshots/sample-english-desktop.png)
+
+<details>
+<summary><strong>Mobile — English and Bangla</strong></summary>
+
+| English | Bangla |
+| --- | --- |
+| <img src="screenshots/sample-english-mobile.png" alt="English mobile workspace" width="280"> | <img src="screenshots/sample-bangla-mobile.png" alt="Bangla mobile workspace" width="280"> |
+
+</details>
+
+## Features
+
+- Validated JSON imports with tender details and requirements sorted by order.
+- Multiple PDF uploads with actual filenames and page counts.
+- One PDF per requirement, with replacement, unmatching, and undo.
+- Expiry validation for mandatory and matched optional documents.
+- Browser-side SHA-256 duplicate detection; identical copies cannot serve different requirements.
+- Immediate checklist statuses, blocker reasons, and readiness counts.
+- Ordered PDF generation with an English cover and page footers.
+- Responsive desktop/mobile layouts and English/Bangla controls.
+- Local document processing without a backend, database, or online document storage.
+
+## Quick start
+
+Use Node.js 24 and npm. From the directory containing `package.json`:
 
 ```sh
 # Install dependencies
@@ -25,9 +47,9 @@ npm install
 npm run dev
 ```
 
-The application runs locally on `http://127.0.0.1:5173`.
+Open the local address printed by Vite, normally `http://127.0.0.1:5173`.
 
-### Build & Verification
+### Production build
 
 ```sh
 # Type-check TypeScript codebase
@@ -35,61 +57,132 @@ npm run typecheck
 
 # Build optimized production bundle
 npm run build
-
-# Run end-to-end Playwright test suite
-npx playwright test
+npm run preview
 ```
 
----
+Deploy the generated `dist/` directory to a static HTTPS host. No backend or environment variables are required. Use localhost or HTTPS for Web Crypto support.
 
-## Complete Workflow (Import → Match & Check → Generate)
+## How to use
 
-1. **Step 1: Tender Import**
-   - Click **Import requirements** to load any tender `requirements.json` via file picker, or click **Load sample** to explore with the provided contest sample pack.
-   - Parses and strictly validates tender metadata (`tender_id`, `title`, `procuring_entity`, `bidder`, `submission_deadline`) and all requirements in submission order. Invalid formats show clear error messages without discarding existing valid state.
-   - Upload multiple PDF documents up to **30 files** and **50 MB** total limit. Non-PDFs are rejected immediately. Actual page counts and SHA-256 content hashes are calculated in-browser.
+1. Choose **Import requirements** and select `requirements.json`, or choose **Load sample**.
+2. Upload supporting PDFs and wait for page reading and duplicate checks.
+3. Choose a PDF for each requirement. Already assigned files and identical copies cannot be used elsewhere.
+4. Enter expiry dates where required. An expiry equal to the submission deadline is valid.
+5. Resolve blocking statuses, then choose **Generate package**.
+6. Save the PDF. A **Download package** link remains available after generation.
 
-2. **Step 2: Match & Verify**
-   - **One-to-one document matching**: Assign uploaded files to requirements. Selecting a document prevents it from being chosen elsewhere.
-   - **Byte-level Duplicate Prevention**: SHA-256 fingerprints detect identical copies even with different filenames. Identical copies are flagged and prevented from satisfying different requirements.
-   - **Expiry Date Management**: Collects expiry dates for matched requirements flagged with `has_expiry` (both mandatory and optional). Expiry date equal to the submission deadline is accepted as valid.
-   - **Checklist Statuses**:
-     - `Missing`: Mandatory requirement without a file (blocks generation).
-     - `Not provided`: Optional requirement without a file (does not block).
-     - `Expiry date needed`: Matched requirement requiring an expiry date that has not been entered (blocks generation).
-     - `Expired`: Document expiry date is strictly earlier than submission deadline (blocks generation).
-     - `OK`: Satisfied requirement with valid expiry if required (does not block).
-   - **Reversible Actions**: Full **Undo** button restores previous assignments and expiry dates. File removal cleanly removes all associated bindings without stale references.
+Replacing a match clears its expiry date. Undo restores the previous match and date without changing other rows. Removing a file clears its assignment and undo history. A new valid JSON import resets assignments/dates while retaining uploads; invalid imports preserve the current tender. Load sample replaces the tender and uploaded files. Changing package inputs invalidates previous output and prevents stale generation results.
 
-3. **Step 3: Generate & Download Package**
-   - When all mandatory requirements are satisfied, valid, and free of blockers, the **Generate package** button activates.
-   - Generates `<tender_id>_Package.pdf` entirely in the browser:
-     - **Cover Page**: Standard English cover sheet detailing tender metadata, creation date, and included documents schedule in requirement order.
-     - **Source Document Assembly**: Appends all pages of matched PDFs in requirement order. Preserves orientation, annotations, and dimensions.
-     - **Continuous Footers**: Centered bottom footer `"<tender_id> | Page X of Y"` across all pages including the cover, styled without overlapping source content.
-   - Automatic browser download trigger and persistent manual download button.
-   - Any modification to inputs immediately invalidates generated results and prevents stale downloads.
+## Status rules
 
-4. **Step 4: English & Bangla Localization**
-   - Full bilingual interface toggle between English and বাংলা.
-   - Supports native Bangla requirement titles (`title_bn`) while maintaining an English cover page as required by procurement standards.
-   - User workflow, matches, and expiry state are fully preserved across language switches.
+Each requirement has exactly one status.
 
----
+| Status | Condition | Blocks generation |
+| --- | --- | --- |
+| Missing | Mandatory requirement has no matched PDF | Yes |
+| Not provided | Optional requirement has no matched PDF | No |
+| Expiry date needed | Matched PDF requires a valid expiry date that has not been entered | Yes |
+| Expired | Expiry date is before the deadline | Yes |
+| OK | Matched PDF passes all applicable checks | No |
 
-## Key Features & Browser-Only Security
+Matched optional documents follow the same expiry rules. Unused duplicates do not block generation, but assigning identical bytes to different requirements is prevented. Pending file checks block generation; unreadable unassigned PDFs are excluded.
 
-- **Strict Privacy**: Uploaded PDFs and requirements files are never transferred to a server, cloud service, or database.
-- **Robust Error Handling**: Gracefully identifies password-protected (encrypted) or corrupt PDFs without crashing.
-- **Responsive Layout**: Designed for desktop, tablet, and narrow mobile viewports (down to 320px) without horizontal clipping.
-- **Deliverables**:
-  - Sample generated package: `output/T-2026-0417_Package.pdf` (16 total pages).
-  - Screenshots: `screenshots/` directory showcasing document statuses and application views.
+## Input format
 
----
+Different tenders use the same structure; application logic does not depend on sample IDs, filenames, or counts.
 
-## AI Tools & Contest Prompts
+```json
+{
+  "tender": {
+    "tender_id": "DEMO-001",
+    "title": "Office Equipment Procurement",
+    "procuring_entity": "Example Procurement Office",
+    "bidder": "Example Supplier Ltd.",
+    "submission_deadline": "2026-12-15"
+  },
+  "requirements": [
+    {
+      "id": "DOC-01",
+      "order": 1,
+      "title_en": "Trade License",
+      "title_bn": "ট্রেড লাইসেন্স",
+      "mandatory": true,
+      "has_expiry": true
+    }
+  ]
+}
+```
 
-- **AI Tools Used**: Google Antigravity Coding Assistant (Claude 3.5 Sonnet / Claude 3.7 Sonnet).
-- **Most Useful Prompt**:
-  > *"Implement Step 3 of Tender Document Package Builder: generate combined PDF package using pdf-lib with formal English cover page, dynamic page counts, and custom bottom footers matching Section 6 requirements."*
+Required tender fields must be non-empty text, and the deadline must be a real `YYYY-MM-DD` date. Requirements must be a non-empty list with unique IDs, unique positive integer orders, non-empty English/Bangla titles, and boolean mandatory/expiry fields.
+
+## Generated PDF
+
+The first page is an English cover containing tender details, the creation date in Bangladesh time, and included documents in order. All pages of matched PDFs follow in their original internal order. Unmatched optional requirements and unassigned uploads are excluded.
+
+Every page has `<tender_id> | Page X of Y`. Source pages receive a separate footer area to avoid covering content. Mixed page sizes, crop boxes, rotation, and UserUnit are handled. Normal pages retain vector content; annotated/widget pages are rendered locally to preserve their visible appearance.
+
+Output filename: `<tender_id>_Package.pdf`, with unsafe filename characters replaced.
+
+[View the generated sample package](output/T-2026-0417_Package.pdf) — 16 pages including the cover, with eight included documents and two optional requirements omitted. All sample companies and documents are fictional.
+
+## Stack
+
+| Technology | Purpose |
+| --- | --- |
+| React + TypeScript | Interface and application state |
+| Vite | Development server and static build |
+| PDF.js | Page counts and annotated-page rendering |
+| PDF-lib + fontkit | PDF assembly, cover, and footers |
+| Web Crypto API | SHA-256 duplicate detection |
+| Lucide React | Icons |
+| Noto Sans Bengali | Bangla typography |
+| Playwright | Browser tests |
+
+## Project structure
+
+```text
+src/
+  main.tsx              Application state and workflow
+  RequirementList.tsx   Matching, expiry controls, and statuses
+  model.ts              Input validation and upload limits
+  review.ts             Status, duplicate, and readiness rules
+  pdf.ts                PDF reading and rendering
+  generate.ts           Cover, document assembly, and footers
+  strings.ts / bn.ts    English and Bangla copy
+  *.css                 Responsive styles
+public/
+  sample-pack/          Fictional test documents and requirements
+  fonts/                PDF font and its license
+screenshots/            Desktop and mobile screenshots
+tests/                  Import, review, and generation tests
+output/                 Generated sample PDF
+```
+
+## Verification
+
+```sh
+npx playwright install chromium
+npm test
+npm run typecheck
+npm run build
+```
+
+Tests cover sample/alternate imports, invalid JSON/structure, actual PDF page counts, non-PDF rejection, unreadable/password-protected files, upload limits, duplicate bytes, same-name files with different bytes, matching/undo/removal, optional expiry, deadline equality, language-state retention, generation failure/retry, stale results, PDF contents/page counts, mixed sizes/rotations/annotations, and mobile overflow.
+
+Set `TEST_PORT` to a free port if needed. `TEST_BROWSER_PATH` can select an existing Chromium executable; `TEST_DOWNLOADS_PATH` can set a download directory.
+
+In the Windows AppContainer test environment, native Blob downloads may be cancelled. Tests verify the download event and filename, then inspect the exact generated browser Blob for that specific cancellation. The app also provides an explicit download link.
+
+## Privacy and limitations
+
+- Maximum 30 PDFs and 50 MiB total, displayed as 50 MB.
+- Uploaded document bytes stay in the browser. Requests serve static assets/fonts and the explicitly requested sample pack.
+- Work is held in memory and is lost on reload.
+- Large PDFs can consume significant memory. Annotated pages render at up to 144 dpi with a 16-megapixel canvas cap.
+- Interactive form behavior, clickable annotations, and cryptographic signatures are not preserved; visible appearances are included.
+- Unsupported cover characters or excessive cover content produce a clear error instead of clipped output.
+- Matching and expiry entry are manual. OCR, automatic matching, persistent projects, and bonus exports are outside the current scope.
+
+## License
+
+The original application code is licensed under the [MIT License](LICENSE). Third-party libraries and bundled fonts retain their respective licenses. The fictional sample pack remains subject to its supplied usage terms and is not relicensed by the application's MIT license. See `public/fonts/OFL.txt` for the bundled PDF font license.
