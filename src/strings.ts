@@ -1,10 +1,10 @@
 // Keep UI copy here so another locale can supply the same keys.
 export const en = {
- brand: 'Tenderdesk', product: 'DOCUMENT PACKAGE BUILDER', local: 'Files stay on this device', eyebrow: 'YOUR SUBMISSION WORKSPACE', stepTag: 'STEP 2 OF 3', footer: 'Tenderdesk · A little order. A more confident submission.', browser: 'Browser-only processing',
+ brand: 'Tenderdesk', product: 'DOCUMENT PACKAGE BUILDER', local: 'Files stay on this device', eyebrow: 'YOUR SUBMISSION WORKSPACE', stepTag: 'IMPORT · CHECK · GENERATE', footer: 'Tenderdesk · A little order. A more confident submission.', browser: 'Browser-only processing',
  mandatoryMissing: (count: number) => `${count} mandatory missing`, fileUsage: (count: number, max: number) => `${count} / ${max} files`, fileDetails: (pages: number, size: string) => `${pages} ${pages === 1 ? 'page' : 'pages'} · ${size}`, pagesRead: (pages: number, reading: boolean) => `${pages} pages read${reading ? ' · Reading remaining PDFs…' : ''}`,
  heading: 'A complete tender starts here.', intro: 'Bring in your requirements and supporting documents. Build a clear foundation for your submission.',
  import: 'Import requirements', sample: 'Load sample', importing: 'Loading…',
- step1: 'Import & prepare', step2: 'Match & review', step3: 'Generate package', later: 'Available in a later step',
+ step1: 'Import', step2: 'Match & check', step3: 'Generate', later: 'Complete the checklist first',
  summary: 'Tender overview', emptyTitle: 'Your next tender, organized.', emptySummary: 'Import a requirements.json file to see the tender details and required documents.',
  entity: 'Procuring entity', bidder: 'Bidder', deadline: 'Submission deadline',
  docs: 'Supporting documents', docsHelp: 'Add the PDFs you plan to include in your tender.', choose: 'Choose PDFs', drop: 'Drop your PDFs here', dropHelp: 'or choose files from your device', limits: 'PDF only · Up to 30 files · 50 MB total',
@@ -12,7 +12,7 @@ export const en = {
  requirements: 'Requirements checklist', reqHelp: 'Listed in the order specified by the tender.', reqEmpty: 'Start with your requirements', reqEmptyHelp: 'Choose a requirements.json file or load the sample to explore the workspace.',
  mandatory: 'Mandatory', optional: 'Optional', expiry: 'Expiry date required', noExpiry: 'No expiry date required', missing: 'Missing', notProvided: 'Not provided',
  order: 'Order', document: 'Required document', status: 'Status',
- readiness: 'Package readiness', generate: 'Generate package', blocked: 'Generate remains unavailable until PDF generation is implemented in Step 3.',
+ readiness: 'Package readiness', generate: 'Generate package', blocked: 'Resolve the blocking issues above before generating your package.',
  next: 'Review every match before generating', nextHelp: 'One PDF per requirement. Identical copies can be used only once.', sampleNotice: 'Sample loaded. All sample companies and documents are fictional.',
  expiryNeeded: 'Expiry date needed', expired: 'Expired', ok: 'OK', chooseMatch: 'Choose a PDF…', unmatch: 'Unmatch', undo: 'Undo last match change', expiryDate: 'Expiry date', checking: 'Checking file…', duplicate: 'Identical copy', hashFail: 'Cannot check this file for duplicates. Remove it and try again.',
  matchLabel: (title: string) => `PDF for ${title}`, expiryLabel: (title: string) => `Expiry date for ${title}`, unmatchLabel: (title: string) => `Unmatch ${title}`,
@@ -24,5 +24,8 @@ export const en = {
  pdfOnly: 'Only PDF files are accepted.', countLimit: 'The limit is 30 PDFs. Remove a file before adding another.', sizeLimit: 'This file would exceed the 50 MB total limit.', unreadable: 'Cannot read this PDF. It may be damaged or password protected.',
  sampleFail: 'The sample could not be loaded. Try again or import files from your device.',
  privacy: 'Private by design. Your uploaded documents are processed in your browser and are never sent to a server.',
- readFail: 'This requirements file could not be read. Please try another file.'
+ readFail: 'This requirements file could not be read. Please try another file.',
+ workflow: 'Package workflow', jsonInput: 'Import requirements JSON', pdfInput: 'Upload PDF documents', language: 'Interface language', ready: 'All checks passed. Generate your ordered PDF package.', noPack: 'Import requirements to start your package.', wait: 'Wait for all files to finish reading and duplicate checking.', generating: 'Generating package…', success: 'Package generated successfully.', download: 'Download package', generationError: 'The package could not be generated. Your work is preserved. Try again.', stale: 'Inputs changed during generation. Generate again using the updated checklist.', encrypted: 'Password-protected PDFs are not supported. Export an unlocked copy first.', coverOverflow: 'Tender details are too long for a readable single-page cover. Shorten the titles and try again.', unsupported: 'The cover contains characters that the bundled font cannot display. Check tender details.', footerNote: 'The cover is in English. Each source page keeps its proportions, with a separate footer area.',
+ downloadName: (filename: string, pages: number) => `${filename} · ${pages} pages`, byteUnit: 'MB', fileSize: (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`, totalSize: (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB / 50 MB`,
 };
+export type Strings = typeof en;

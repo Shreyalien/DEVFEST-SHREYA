@@ -1,6 +1,4 @@
-// All user-facing text lives here. To add Bangla later, create `bn.js` with
-// the same keys and register it in `index.js`. Keys ending in `_one` / `_other`
-// are chosen automatically from the `count` parameter.
+// All user-facing text lives here.
 const en = {
   app: {
     name: 'Tender Package Builder',
@@ -51,6 +49,10 @@ const en = {
     dismiss: 'Dismiss messages',
     issuesTitle_one: '{count} file was not added',
     issuesTitle_other: '{count} files were not added',
+    matchedTo: 'Matched to {title}',
+    unmatched: 'Not matched',
+    duplicate: 'Duplicate',
+    duplicateOf: 'Identical to {name}',
   },
   requirements: {
     title: 'Required documents',
@@ -83,8 +85,11 @@ const en = {
   readiness: {
     title: 'Package readiness',
     notReady: 'Not ready to generate',
+    ready: 'Ready to generate',
     remainingLabel: 'Still needed:',
     generate: 'Generate package',
+    generating: 'Generating PDF…',
+    download: 'Download package',
     summary: '{ok} OK, {missing} missing, {expiryNeeded} expiry date needed, {expired} expired, {notProvided} not provided',
     needTender: 'Import a requirements file',
     waitReading: 'Wait for documents to finish loading',
@@ -94,7 +99,8 @@ const en = {
     expiryNeeded_other: '{count} expiry dates are needed',
     expired_one: '{count} document is expired',
     expired_other: '{count} documents are expired',
-    needGeneration: 'Package generation is not available yet',
+    successTitle: 'Package generated successfully!',
+    successBody: '{pages}-page tender package downloaded.',
   },
   errors: {
     unknown: 'Something went wrong. Please try again.',
@@ -119,6 +125,7 @@ const en = {
     itemNotObject: 'Requirement #{index} is not an object.',
     itemField: 'Requirement #{index}: "{field}" must be {expected}.',
     duplicateId: 'Requirement id "{id}" is used more than once.',
+    generateFailed: 'Failed to generate package: {detail}',
     expected: {
       text: 'non-empty text',
       number: 'a number',

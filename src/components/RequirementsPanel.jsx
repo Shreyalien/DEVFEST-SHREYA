@@ -1,12 +1,23 @@
 import { CalendarClock, ClipboardList, Undo2 } from 'lucide-react'
-import { t } from '../i18n/index.js'
+import { getLocale, t } from '../i18n/index.js'
 import { formatDeadline } from '../lib/limits.js'
 import { canAssign } from '../lib/matching.js'
 
 export function RequirementsPanel({ rows, items, assignments, deadline, onAssign, onExpiry, onUndo, canUndo }) {
+  const locale = getLocale()
   const mandatoryCount = rows?.filter((r) => r.req.mandatory).length ?? 0
   const readyDocs = items.filter((d) => d.status === 'ready')
-  const titleOf = (reqId) => rows.find((r) => r.req.id === reqId)?.req.title ?? ''
+  
+  // Use localized title
+  const getReqTitle = (req) => {
+    if (locale === 'bn' && req.titleBn) return req.titleBn
+    return req.title || req.title_en || ''
+  }
+
+  const titleOf = (reqId) => {
+    const row = rows?.find((r) => r.req.id === reqId)
+    return row ? getReqTitle(row.req) : ''
+  }
 
   return (
     <section className="panel panel--workspace" id="checklist" aria-labelledby="requirements-title">
@@ -35,13 +46,15 @@ export function RequirementsPanel({ rows, items, assignments, deadline, onAssign
             const statusText = t(`requirements.${status}`)
             const selectId = `match-${req.id}`
             const dateId = `expiry-${req.id}`
+            const localizedTitle = getReqTitle(req)
+
             return (
               <li key={req.id} className="req">
                 <span className="req__num" aria-hidden="true">
                   {index + 1}
                 </span>
                 <div className="req__main">
-                  <p className="req__title">{req.title}</p>
+                  <p className="req__title">{localizedTitle}</p>
                   <p className="req__meta">
                     <span className={`tag ${req.mandatory ? 'tag--mandatory' : 'tag--optional'}`}>
                       {req.mandatory ? t('requirements.mandatory') : t('requirements.optional')}

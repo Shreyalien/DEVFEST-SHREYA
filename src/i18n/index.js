@@ -1,7 +1,9 @@
 import en from './en.js'
+import bn from './bn.js'
 
-const locales = { en }
+const locales = { en, bn }
 let activeLocale = 'en'
+const listeners = new Set()
 
 function lookup(messages, key) {
   return key.split('.').reduce((node, part) => (node == null ? undefined : node[part]), messages)
@@ -24,6 +26,18 @@ export function t(key, params = {}) {
   return template.replace(/\{(\w+)\}/g, (_, name) => (params[name] ?? `{${name}}`))
 }
 
+export function getLocale() {
+  return activeLocale
+}
+
 export function setLocale(locale) {
-  if (locales[locale]) activeLocale = locale
+  if (locales[locale] && activeLocale !== locale) {
+    activeLocale = locale
+    listeners.forEach((fn) => fn(activeLocale))
+  }
+}
+
+export function subscribeLocale(fn) {
+  listeners.add(fn)
+  return () => listeners.delete(fn)
 }

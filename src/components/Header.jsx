@@ -1,7 +1,13 @@
-import { FileStack, Lock } from 'lucide-react'
-import { t } from '../i18n/index.js'
+import { FileStack, Globe, Lock } from 'lucide-react'
+import { getLocale, setLocale, t } from '../i18n/index.js'
 
-export function Header() {
+export function Header({ currentLocale, onLocaleChange }) {
+  const toggleLocale = () => {
+    const next = currentLocale === 'en' ? 'bn' : 'en'
+    setLocale(next)
+    onLocaleChange(next)
+  }
+
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -14,10 +20,23 @@ export function Header() {
             <p className="brand__tagline">{t('app.tagline')}</p>
           </div>
         </div>
-        <p className="privacy" title={t('app.privacyHint')}>
-          <Lock size={15} aria-hidden="true" />
-          <span>{t('app.privacy')}</span>
-        </p>
+
+        <div className="site-header__actions">
+          <button
+            type="button"
+            className="lang-toggle"
+            onClick={toggleLocale}
+            aria-label={currentLocale === 'en' ? 'Switch to Bangla' : 'Switch to English'}
+          >
+            <Globe size={15} aria-hidden="true" />
+            <span>{currentLocale === 'en' ? 'বাংলা' : 'English'}</span>
+          </button>
+
+          <p className="privacy" title={t('app.privacyHint')}>
+            <Lock size={15} aria-hidden="true" />
+            <span>{t('app.privacy')}</span>
+          </p>
+        </div>
       </div>
     </header>
   )

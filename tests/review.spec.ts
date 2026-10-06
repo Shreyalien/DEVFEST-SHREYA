@@ -80,7 +80,7 @@ test('different dataset, same names with different bytes, readiness and import r
  await expect(page.locator('.readiness-counts')).toContainText('1 blocking issue');
  await page.getByLabel(`Expiry date for ${different.requirements[0].title_en}`,{exact:true}).fill('2028-02-29');
  await expect(page.locator('.readiness-counts')).toContainText('2 OK');
- await expect(page.getByRole('button',{name:'Generate package',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Generate package',exact:true})).toBeEnabled();
  await page.setViewportSize({width:320,height:812}); expect(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth)).toBe(true);
  await load(); await expect(row(page,'Business registration').locator('.status')).toHaveText('Missing');
  await expect(row(page,different.requirements[0].title_en).locator('.status')).toHaveText('Not provided');
